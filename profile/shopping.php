@@ -10,6 +10,62 @@ if(empty($username))
  exit;
 }
 
+$starter = '<ul class="list-group w-100">
+<li class="list-group-item bg-success">
+	<h3 class="text-center text-white">STARTER PLAN</h3>
+</li>
+<li class="list-group-item">
+	1GB STORAGE
+</li>
+<li class="list-group-item" style="color:#ddd;">
+	24*7 TECHNICAL SUPPORT
+</li>
+<li class="list-group-item" style="color:#ddd;">
+	INSTANT EMAIL SOLUTION 
+</li>
+<li class="list-group-item" style="color:#ddd;">
+	DATA SECURITY
+</li>
+<li class="list-group-item" style="color:#ddd;">
+	SEO SERVICES
+</li>
+<li class="list-group-item bg-light text-center buy-btn" amount="99" plan="starter" storage="1024" style="cursor:pointer;">
+	<h4><i class="fa fa-inr"></i>99.00/Monthly</h4>
+</li>
+</ul>';
+
+$exclusive = '<ul class="list-group w-100">
+<li class="list-group-item bg-warning">
+	<h3 class="text-center text-white">EXCLUSIVE PLAN</h3>
+</li>
+<li class="list-group-item">
+	UNLIMITED STORAGE
+</li>
+<li class="list-group-item" >
+	24*7 TECHNICAL SUPPORT
+</li>
+<li class="list-group-item">
+	INSTANT EMAIL SOLUTION 
+</li>
+<li class="list-group-item">
+	DATA SECURITY
+</li>
+<li class="list-group-item">
+	SEO SERVICES
+</li>
+<li class="list-group-item bg-light text-center buy-btn" amount="500" plan="exclusive" storage="unlimited" style="cursor:pointer;">
+	<h4><i class="fa fa-inr"></i>500/Monthly</h4>
+</li>
+</ul>';
+
+$get_plans = "SELECT plans FROM users WHERE username='$username'";
+$response = $db->query($get_plans);
+$data = $response->fetch_assoc();
+$plans = $data['plans'];
+
+
+
+
 ?>
 
 
@@ -37,8 +93,7 @@ if(empty($username))
 	<a href="" class="navbar-brand">
 		
 <?php
-
-$sql = "SELECT full_name FROM user WHERE user_name='$username'";
+$sql = "SELECT full_name FROM users WHERE username='$username'";
 $response = $db->query($sql);
 $data = $response->fetch_assoc();
 echo $data['full_name'];
@@ -56,38 +111,45 @@ $_SESSION['buyer_name'] = $data['full_name'];
 		</li>
 	</ul>
 </nav>
-<br>
+
 
 
 <div class="container-fluid p-0 m-0">
 <div class="row">
 	<div class="col-md-6 p-5">
-		<ul class="list-group w-100">
-			<li class="list-group-item bg-success">
-				<h3 class="text-center text-white">STARTER PLAN</h3>
-			</li>
-			<li class="list-group-item">
-				1GB STORAGE
-			</li>
-			<li class="list-group-item" style="color:#ddd;">
-				24*7 TECHNICAL SUPPORT
-			</li>
-			<li class="list-group-item" style="color:#ddd;">
-				INSTANT EMAIL SOLUTION 
-			</li>
-			<li class="list-group-item" style="color:#ddd;">
-				DATA SECURITY
-			</li>
-			<li class="list-group-item" style="color:#ddd;">
-				SEO SERVICES
-			</li>
-			<li class="list-group-item bg-light text-center buy-btn" amount="99" plan="starter" style="cursor:pointer;">
-				<h4><i class="fa fa-inr"></i>99.00/Monthly</h4>
-			</li>
-		</ul>
+		<!--starter-->
+		<?php
+		if($plans=="free"){
+       echo $starter;
+		}else if($plans=="starter"){
+			echo "<button class='btn btn-light shadow-lg'>
+			 <h3>You are currently using starter plan</h3>
+			</button>";
+		}
+
+		?>
 	</div>
 	<div class="col-md-6 p-5">
-			<ul class="list-group w-100">
+		<!--exclusive-->
+		<?php
+		if($plans=="free" || $plans=="starter"){
+       echo $exclusive;
+		}
+
+		?>
+	</div>
+</div>
+
+
+<div class="row">
+<div class="col-md-4 p-5 text-center"></div>
+	<div class="col-md-4 p-5 text-center">
+    <?php
+  if($plans=="exclusive"){
+	echo "<button class='btn btn-light shadow-lg'>
+	 <h3>You are currently using exclusive plan</h3>
+	</button>";
+	echo '<ul class="list-group w-100">
 			<li class="list-group-item bg-warning">
 				<h3 class="text-center text-white">EXCLUSIVE PLAN</h3>
 			</li>
@@ -106,12 +168,14 @@ $_SESSION['buyer_name'] = $data['full_name'];
 			<li class="list-group-item">
 				SEO SERVICES
 			</li>
-			<li class="list-group-item bg-light text-center buy-btn" amount="500" plan="exclusive" style="cursor:pointer;">
-				<h4><i class="fa fa-inr"></i>500/Monthly</h4>
-			</li>
-		</ul>
+			
+			</ul>';
+}
+	?>
 	</div>
+	<div class="col-md-4 p-5 text-center"></div>
 </div>
+
 </div>
 
 
@@ -123,8 +187,9 @@ $_SESSION['buyer_name'] = $data['full_name'];
 			$(this).click(function(){
 				var amount = $(this).attr("amount");
 				var plan = $(this).attr("plan");
+				var storage = $(this).attr("storage"); 
 				alert(plan);
-				location.href = "php/pay.php?amount="+amount
+				location.href = "php/pay.php?amount="+amount+"&plan="+plan+"&storage="+storage;
 			});
 		});
 	});

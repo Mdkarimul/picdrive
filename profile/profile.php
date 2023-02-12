@@ -30,15 +30,12 @@ if(empty($username))
 <script type="text/javascript" src="js/profile.js"></script>
 
 </head>
-<body style="background-color: #ccc;">
-	
+<body style="background-color: #ccc;">	
 <nav class="nav-bar nav-bar-expand-md bg-dark navbar-dark px-2">
-	
-	<a href="" class="navbar-brand">
-		
+	<a href="" class="navbar-brand">	
 <?php
 
-$sql = "SELECT full_name FROM user WHERE user_name='$username'";
+$sql = "SELECT full_name FROM users WHERE username='$username'";
 $response = $db->query($sql);
 $data = $response->fetch_assoc();
 echo $data['full_name'];
@@ -57,7 +54,9 @@ echo $data['full_name'];
 </nav>
 <br>
 
+<div class="upload-notice fixed-top">
 
+</div>
 <div class="container-fluid p-0 m-0">
 	<div class="row p-0 m-0">
 		<div class="col-md-3 p-4  border">
@@ -67,14 +66,17 @@ echo $data['full_name'];
 				<span id="free_memory">
 					
 					<?php
-                      $get = "SELECT storage,used_storage FROM user WHERE user_name='$username'";
+                      $get = "SELECT storage,used_storage,plans FROM users WHERE username='$username'";
                       $response = $db->query($get);
                      $data =  $response->fetch_assoc();
                     $total =  $data['storage'];
                     $used =  $data['used_storage'];
+					$plans = $data['plans'];
+					if($plans=="starter" || $plans=="free")
+					{
                     $free_space = $total-$used;
                     $per = round(($used*100)/$total,2);
-                    echo "FREE SPACE : ".$free_space ."MB";
+                    echo "FREE SPACE : ".$free_space ." MB";
                     $bg = '';
                     if($per>80)
                     {
@@ -84,32 +86,38 @@ echo $data['full_name'];
                     {
                     $bg = "bg-primary";
                     } 
+				   }else{
+					echo "Used Storage ".$used." MB";
+				   }
 					?>
-
-
 				</span>
-				<div class=" upload-progress-con d-none progress bg-dark w-50 my-2" style="height:5px;">
+				<div class=" upload-progress-con d-none  progress bg-dark w-50 my-2" style="height:5px;">
 					<div class=" progress-control progress-bar progress-bar-animated progress-bar-striped" style=" width:<?php    ?>"></div>
 				</div>
 
                 <div class="progress-details d-none">
                 	<span class="progress-per"><?php  echo $per."%";  ?></span>
-                	
                 </div>
 			</div>
 
 			<div class="d-flex flex-column justify-content-center align-items-center bg-white w-100 shadow-lg" style="height:250px;">
-				<i class="fa fa-database" style="font-size:100px;cursor: pointer;"></i>
+				<i class="fa fa-database" style="font-size:100px;"></i>
 				<h4>Memory status</h4>
 				<span id="m_status">
 					<?php
                       
-                      $get = "SELECT storage,used_storage FROM user WHERE user_name='$username'";
+                      $get = "SELECT storage,used_storage,plans FROM users WHERE username='$username'";
                       $response = $db->query($get);
                      $data =  $response->fetch_assoc();
                     $total =  $data['storage'];
                     $used =  $data['used_storage'];
-                    $per = round(($used*100)/$total,2);
+					$plans = $data['plans'];
+					$per = 0;
+					
+					if($plans=="starter" || $plans =="free")
+					{
+						$display = "";
+						$per = round(($used*100)/$total,2);
                     echo $used ."/" .$total."  MB";
                     $bg = '';
                     if($per>80)
@@ -118,18 +126,22 @@ echo $data['full_name'];
                     }
                     else
                     {
-                    $bg = "bg-primary";
+                    $bg = "bg-success";
                     } 
+					}
+					else{
+						$display = "d-none";
+					}
 					?>
 				</span>
-				<div class="progress w-50  my-2 bg-dark  " style="height:5px;">
+				<div class="progress w-50  my-2 bg-dark <?php echo $display ?>  " style="height:5px;">
 					<div class=" m-progress progress-bar <?php  echo $bg; ?>  "style="width:<?php echo $per."%"; ?>"></div>
 				</div>
 
                 <div>
-                	<span><?php echo $per."%"; ?></span>
-                	<i class="fa fa-pause-circle"></i>
-                	<i class="fa fa-times-circle"></i>
+                	<span class="<?php echo  $plans=="free" || $plans=="starter" ? $bg : "bg-success"  ?> p-1 px-4" ><?php echo $plans=="starter" || $plans=="free" ?   $per."/100 Percent" :  "Used ". $used." MB From UNLIMITED "; ?></span>
+                	<!-- <i class="fa fa-pause-circle"></i>
+                	<i class="fa fa-times-circle"></i> -->
                 </div>
 			</div>
 		</div>
@@ -141,7 +153,7 @@ echo $data['full_name'];
 				<span id="count_photo">
 					
 					<?php
-                    $get_id = "SELECT id FROM user WHERE user_name='$username'";
+                    $get_id = "SELECT id FROM users WHERE username='$username'";
                     $response = $db->query($get_id);
                    $data =  $response->fetch_assoc();
                    $t_name =  "user_".$data['id'];
@@ -165,7 +177,6 @@ echo $data['full_name'];
 				<a href="shopping.php"><i class="fa fa-shopping-cart" style="font-size:100px;cursor: pointer;"></i></a>
 				<h4>Memory shopping</h4>
 				<span id="count_photo">
-					
 					STARTS FROM 99.00/Manthly
 				</span>
 				
@@ -175,7 +186,21 @@ echo $data['full_name'];
 		</div>
 	</div>
 </div>
-
-
 </body>
 </html>
+
+<?php 
+
+$current_date = date('Y-m-d');
+$get_expiry_date = "SELECT expiry_date FROM users WHERE username='$username'";
+$response = $db->query($get_expiry_date);
+$data = $response->fetch_assoc();
+$expiry_date = $data['expiry_date'];
+if($current_date == $expiry_date){
+	echo  "activation faild ";
+}else{
+	echo "activation success ";
+}
+
+
+?>

@@ -9,13 +9,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  	<link rel="stylesheet" type="text/css" href="style/index.css">
-
-  	<link rel="preconnect" href="https://fonts.gstatic.com">
+<link rel="stylesheet" type="text/css" href="style/index.css">
+<link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Francois+One&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 <!--link all script file here-->
 
 <script type="text/javascript" src="js/rand.js"></script>
@@ -29,16 +27,14 @@
 
 <body>
 	
-	<div class="row">
+	<div class="row p-0 m-0">
+    <div class="top-line"></div>
 		<div class="col-md-4"></div>
-		<div class="col-md-4 p-4" style="background:url('images/one.jpg');background-size:100% 100%;">
-
+		<div class="col-md-4 p-4" style="background:url('images/one.jpg');">
 		</div>
-		<div class="col-md-4 p-4">
-			
-			   
+		<div class="col-md-4 p-4">  
        <form autocomplete="off">
-       	<h3 class="ml-2 mb-3">Signup</h3>
+       	<h3 class="ml-2 mb-3">Signup here</h3>
        	<div class="form-group mb-3">
        	<input type="text" name="name" placeholder="Enter your name" class="form-control full_name">
        	</div>
@@ -59,7 +55,7 @@
 
 
          <div class="d-flex justify-content-around mb-3">
-         <button class="btn float-left py-2" type="button"> Generate  security key</button>
+         <p class="generate-keybtn-txt float-left"> Generate  security key</p>
          <button class="btn float-right g-btn" type="button">GENERATE</button>
          </div>
 
@@ -90,14 +86,15 @@
        		<input type="text" name="code" id="code"  class="my-3" placeholder="Activation code">
        		<button class="btn btn-dark a-btn">Activate now</button>
        	</div>
-            
             <div class="p-2 active-message">
-            	
             </div>
-
        </div>
 
 		</div>
 	</div>
 </body>
 </html>
+
+
+
+

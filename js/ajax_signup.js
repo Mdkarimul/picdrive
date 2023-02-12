@@ -37,7 +37,7 @@ $(document).ready(function(){
              setTimeout(function(){
              	$(".signup-notice").html("");
              },6000);
-             //$("form").trigger('reset');
+             $("form").trigger('reset');
            }
            else if(response.trim() =="signup failed")
            {

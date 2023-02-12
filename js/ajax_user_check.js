@@ -14,7 +14,7 @@ $(document).ready(function(){
       },
       success : function(response){
         
-        
+      
         $(".email-loader").removeClass("fa fa-circle-o-notch fa-spin");
       	 if(response.trim() =="user found")
       	 {
@@ -30,6 +30,11 @@ $(document).ready(function(){
       	 }
       }
       });
+  }else{
+	$(".email-loader").removeClass("fa fa-circle-o-notch fa-spin");
+	$(".email-loader").addClass("fa fa-times-circle text-warning");
+	$(".s-btn").attr("disabled","disabled");
+	$(".email-loader").attr("title","Enter a correct email");
   }
     
 

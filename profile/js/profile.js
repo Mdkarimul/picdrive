@@ -7,6 +7,7 @@ $(document).ready(function(){
 		input.onchange = function(){
 			var file = new FormData();
 			file.append("data",this.files[0]);
+			console.log(this.files);
 			$.ajax({
 				type :"POST",
 				url : "php/upload.php",
@@ -38,18 +39,56 @@ $(document).ready(function(){
 
 				},
 				success : function(response){
-
-					$(".upload-header").html("Upload files");
-					$(".upload-icon").css({
-						opacity : "1",
-						pointerEvents : "auto",
-					});
-					$(".progress-control").css({
-						width : "0"
-					});
-
-                  alert(response);
-
+					if(response.trim()=="Update"){
+						var message = document.createElement("DIV");
+						message.className="alert alert-success shadow-lg rounded-0";
+						message.innerHTML="<b>"+response+"</b>";
+						$(".upload-notice").html(message);
+						setTimeout(function(){
+							$(".upload-header").html("Upload files");
+							$(".upload-icon").css({
+								opacity : "1",
+								pointerEvents : "auto",
+							});
+							$(".upload-progress-con").addClass("d-none");
+							$(".progress-control").css({
+								width : "0"
+							});
+							$(".upload-notice").html("");
+							setTimeout(function(){
+								$(".progress-per").html("<b class='text-success'>Done !</b>");
+							
+								setTimeout(function(){
+									$(".progress-per").html("");
+								},6000);
+							},5000);
+						},3000);
+						
+						
+					}else{
+						var message = document.createElement("DIV");
+						message.className="alert alert-danger shadow-lg rounded-0";
+						message.innerHTML="<b>"+response+"</b>";
+						$(".upload-notice").html(message);
+						setTimeout(function(){
+							$(".upload-header").html("Upload files");
+							$(".upload-icon").css({
+								opacity : "1",
+								pointerEvents : "auto",
+							});
+							$(".upload-progress-con").addClass("d-none");
+							$(".progress-control").css({
+								width : "0"
+							});
+							$(".upload-notice").html("");
+							setTimeout(function(){
+								$(".progress-per").html("<b class='text-danger'>Ops try again !</b>");
+								setTimeout(function(){
+									$(".progress-per").html("");
+								},3000);
+							},3000);
+						},3000);
+					}
                   $.ajax({
                   	type : "POST",
                   	url : "php/count_photo.php",
@@ -69,18 +108,15 @@ $(document).ready(function(){
                   	},
                   	success : function(response){
                   		var data = JSON.parse(response);
-                  		var free ="FREE SPACE : "+data[1]+" MB";
+                  		var free ="FREE SPACE : "+data[1];
                         $("#m_status").html(data[0]);
                         var per = data[2]+"%";
                         $(".m-progress").css({
                         	width : per
                         });
                         $("#free_memory").html(free);
-
                   	}
                   });
-
-
 				}
 
 			});

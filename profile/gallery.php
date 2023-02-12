@@ -1,7 +1,5 @@
 <?php
 require_once("../php/database.php");
-
-
 session_start();
 $username = $_SESSION['username'];
 if(empty($username))
@@ -9,7 +7,6 @@ if(empty($username))
  header("Location:../index.php");
  exit;
 }
-
 ?>
 
 
@@ -36,25 +33,17 @@ if(empty($username))
 		padding: 2px 5px;
 	}
 </style>
-
 </head>
 <body style="background-color: #ccc;">
-	
 <nav class="nav-bar nav-bar-expand-md bg-dark navbar-dark px-2">
-	
-	<a href="" class="navbar-brand">
-		
+	<a href="" class="navbar-brand">	
 <?php
-
-$sql = "SELECT full_name FROM user WHERE user_name='$username'";
+$sql = "SELECT full_name FROM users WHERE username='$username'";
 $response = $db->query($sql);
 $data = $response->fetch_assoc();
 echo $data['full_name'];
 ?>
-
-
 	</a>
-
 	<ul class="navbar-nav float-right">
 		<li class="nav-item">
 			<a href="php/logout.php" class="nav-link">
@@ -64,8 +53,6 @@ echo $data['full_name'];
 	</ul>
 </nav>
 <br>
-
-
 <div class="container mt-5">
 <div class="row load-image">
 
@@ -91,52 +78,50 @@ echo $data['full_name'];
 
 
 <script type="text/javascript">
-	$(document).ready(function(){
-     $(".pic").each(function(){
-     	$(this).click(function(){
-			 $(".image-loader").css({
-				 width :'0%'
-			 });
-			 $("#pic_show").modal();
-     		var img = document.createElement("IMG");
-     		var url = img.src=$(this).attr('data-location');
-			 $.ajax({
-				 type : "POST",
-				 url : url,
-				 xhr : function() {
-                  var r = new XMLHttpRequest();
-				  r.responseType = "blob";
-				  r.onprogress = function(e)
-				  {
-					  console.log(e);
-                    var per =  Math.floor((e.loaded*100)/e.total);
-					
-					$(".image-loader").css({
-                     width : per+"%"
-					});
-					$(".image-loader").html(per+"%");
-				  }
-				  return r;
-				 },
-				 beforeSend : function(){
-					 $(".modal-body").html("Please wait...");
-				 },
-				 success : function(response){
-                   console.log(response);
-				   var img_url = URL.createObjectURL(response);
-				   img.src = img_url;
-				   img.style.width ="100%";
-				   $(".modal-body").html(img);
-				 }
-			 });
-     		
-     	});
-     });
-	});
+
+$( '.load-image').on( 'click', '.pic', function () { 
+				$(".image-loader").css({
+					width :'0%'
+				});
+				$("#pic_show").modal();
+				var img = document.createElement("IMG");
+				var url = img.src=$(this).attr('data-location');
+				$.ajax({
+					type : "POST",
+					url : url,
+					xhr : function() {
+					 var r = new XMLHttpRequest();
+					 r.responseType = "blob";
+					 r.onprogress = function(e)
+					 {
+						 console.log(e);
+					   var per =  Math.floor((e.loaded*100)/e.total);
+					   
+					   $(".image-loader").css({
+						width : per+"%"
+					   });
+					   $(".image-loader").html(per+"%");
+					 }
+					 return r;
+					},
+					beforeSend : function(){
+						$(".modal-body").html("Please wait...");
+					},
+					success : function(response){
+					  console.log(response);
+					  var img_url = URL.createObjectURL(response);
+					  img.src = img_url;
+					  img.style.width ="100%";
+					  $(".modal-body").html(img);
+					}
+				});		
+ });
+
+
+
 
 
 	//load image
-
 	$(document).ready(function(){
 		var s_point = 0;
 		var e_point = 12;
@@ -146,18 +131,38 @@ echo $data['full_name'];
 				type :"POST",
 				url : "load_image.php",
 				cache : false,
-				data : {
+				 data : {
                 s : s_point,
 				e : e_point
 				},
 				success : function(response){
-                 $(".load-image").append(response);
+					var data = JSON.parse(response);
+					for(var i=0;i<data.length;i++){
+						var content =`
+						<div class='col-md-3 px-2 pb-5'>
+						 <div class='card shadow-lg'>
+<div class='card-body d-flex justify-content-center align-items-center'>
+<img src='${data[i][0]}' data-location='${data[i][1]}' width='100' height='150px' class='rounded-circle pic'>
+</div>
+<div class='card-footer d-flex justify-content-around align-items-center'>
+<div class='d-flex align-items-center' style='text-wrap:wrap;height:20px;width:90px;position:relative;'>
+<span style='position:absolute;top:-4px;'>"${data[i][3]}"</span>
+</div>
+<i title='save' class='fa fa-save save-icon d-none' style='cursor:pointer;' data-location='${data[i][1]}'></i>
+<i class='fa fa-spinner loader-icon d-none' style='cursor:pointer;' data-location='${data[i][1]}'></i>
+<i title='edit' class='fa fa-edit edit-icon' style='cursor:pointer;' data-location='${data[i][1]}'></i>
+<i title='download' class='fa fa-download download-icon' style='cursor:pointer;' data-location='${data[i][0]}' file-name='${data[i][0]}'></i>
+<i title='Delete' class='fa fa-trash delete-icon' style='cursor:pointer;' data-location='${data[i][1]}'></i>
+
+</div>
+</div>
+</div>`;
+$(".load-image").append(content);
+					}
 				}
 			});
 		}
 		load_image(s_point,e_point);
-		
-
 		//load image on scroll
 		$(window).scroll(function(){
 			var s_top = $(window).scrollTop();
@@ -166,13 +171,58 @@ echo $data['full_name'];
 			var webpage_height = $(document).height();
 			if(max_height>=webpage_height-60)
 			{
-				s_point = s_point+e_point;
+			  s_point = s_point+e_point;
               load_image(s_point,e_point);
 			}
-			
-
 		});
 	});
+
+
+
+
+
+	// $(document).ready(function(){
+	// 	$(".pic").each(function(){
+	// 		$(this).click(function(){
+	// 			$(".image-loader").css({
+	// 				width :'0%'
+	// 			});
+	// 			$("#pic_show").modal();
+	// 			var img = document.createElement("IMG");
+	// 			var url = img.src=$(this).attr('data-location');
+	// 			$.ajax({
+	// 				type : "POST",
+	// 				url : url,
+	// 				xhr : function() {
+	// 				 var r = new XMLHttpRequest();
+	// 				 r.responseType = "blob";
+	// 				 r.onprogress = function(e)
+	// 				 {
+	// 					 console.log(e);
+	// 				   var per =  Math.floor((e.loaded*100)/e.total);
+					   
+	// 				   $(".image-loader").css({
+	// 					width : per+"%"
+	// 				   });
+	// 				   $(".image-loader").html(per+"%");
+	// 				 }
+	// 				 return r;
+	// 				},
+	// 				beforeSend : function(){
+	// 					$(".modal-body").html("Please wait...");
+	// 				},
+	// 				success : function(response){
+	// 				  console.log(response);
+	// 				  var img_url = URL.createObjectURL(response);
+	// 				  img.src = img_url;
+	// 				  img.style.width ="100%";
+	// 				  $(".modal-body").html(img);
+	// 				}
+	// 			});
+				
+	// 		});
+	// 	});
+	//    });
 
 	
 </script>

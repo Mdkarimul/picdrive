@@ -18,52 +18,39 @@
 
 <script type="text/javascript" src="js/show_password_login.js"></script>
 <script type="text/javascript" src="js/login_user.js"></script>
+<script type="text/javascript" src="js/user_activate.js"></script>
 </head>
 <body>
 	
-	<div class="row">
+	<div class="row p-0  m-0">
 		<div class="col-md-4"></div>
 		<div class="col-md-4 p-4">
 		</div>
 		<div class="col-md-4 p-4">
 			
 			   
-       <form autocomplete="off">
+       <form autocomplete="off" class="login-form">
        	<h3 class="ml-2 mb-3">Login</h3>
-       
-        
         <div class="email-box">
        	<div class="form-group mb-3">
        	<input type="email"  name="email" placeholder="Enter your email " class="form-control email">
        	<i class="fa fa-circle-o-notch fa-spin email-loader d-none"></i>
          </div>
          </div>
-
         <div class="password-box">
         <div class="form-group mb-3">
        	<input type="password" name="password"  class="form-control password password">
        	<i class="fa fa-eye show-icon" style="font-size:18px;"></i>
          </div>
         </div>
-
-
-      
-
-     
          <button  class="btn l-btn m-3 " type="submit">Login now</button>
-         
-     
-    
-
-
          <div class=" p-2 login-notice">
-         	
          </div>
-       </form>
          <div class="d-flex">
          <p>If you don't have a account signup now  <button type="button" class="btn  text-primary "><a href="index.php">Signup now</a></button></p>
-         
          </div>
+       </form>
+      
 
 
        <div class="px-2 d-none  activator">

@@ -20,16 +20,14 @@ $number = 	rand(0,$length);
 $activation_code =  implode($code);
 
 
-$store_user = "INSERT INTO user(full_name,user_name,password,activation_code)
+$store_user = "INSERT INTO users(full_name,username,password,activation_code)
  VALUES('$full_name','$email','$password','$activation_code')
 ";
-
 $response =  $db->query($store_user);
 
 if($response)
 {
  $check_mail =  mail($email,"Picdrive activation code ","Thank you for choosing our products your activation code is : ".$activation_code);
-
  if($check_mail)
  {
  	echo "email send to the user";

@@ -5,14 +5,11 @@
 	require("../../src/Instamojo.php");
 
 	$amount = $_GET['amount'];
+    $plan = $_GET['plan'];
+	$storage = $_GET['storage'];
 
+	$api = new Instamojo\Instamojo('test_f28e93829abb0ef9ef6c106acff', 'test_d97f9a35885a4f1289d59ba5de0', 'https://test.instamojo.com/api/1.1/');
 
-	
-    $api = new Instamojo\Instamojo('test_f28e93829abb0ef9ef6c106acff','test_d97f9a35885a4f1289d59ba5de0',
-	 'https://test.instamojo.com/api/1.1/');
-
-
-	 
 	try {
     	$response = $api->paymentRequestCreate(array(
         "purpose" => "PICDRIVE PLANS",
@@ -21,7 +18,7 @@
         "buyer_name" => $fullname,
         "email" => $username,
         "phone" => "9934940000",
-        "redirect_url" => "http://wapinstitute.com"
+        "redirect_url" => "http://localhost/project-root/picdrive/profile/php/update_storage.php?plan=".$plan."&storage=".$storage
 	        ));
 	   
 	   $payment_url = $response['longurl'];

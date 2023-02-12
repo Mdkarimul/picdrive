@@ -1,16 +1,21 @@
 /* index css  */
 
-
-body{
-	background-color:;
-}
-
 *{
 	padding:0px;
 	margin:0px;
 	box-sizing: border-box;
 	box-shadow: none!important;
 	outline: none;
+}
+body{
+	background-color:transparent;
+}
+
+.top-line{
+	width: 100%;
+	height:5px;
+	float: left;
+	background-color: #ddd;
 }
 
 input{
@@ -20,26 +25,33 @@ input{
 	margin-bottom: 20px!important;
 	border-radius: 50px!important;
 	background-color:#ddd!important;
-
+	font-family: 'Roboto', sans-serif;
 }
-h1,h2,h3,h4,h5,h6,p
+h1,h2,h3,h4,h5,h6
 {
 	font-family: 'Francois One', sans-serif;
 }
 
+
+.generate-keybtn-txt{
+	font-family: 'Roboto', sans-serif;
+}
 .g-btn
 {
-	border-radius: 50px;
-	padding: 8px 20px;
+	border-radius: 5px;
+	padding:0px 10px;
 	background-color:#ddd;
-	font-weight: bold;
+	font-weight:normal;
 }
+
 
 .s-btn,.l-btn
 {
-	background-color: #020;
+	background-color: rgb(1, 19, 1);
 	padding: 10px 20px;
-	color: white;
+	color:#ccc;
+	cursor: pointer;
+	font-family: 'Roboto', sans-serif;
 }
 
 .password-box,.email-box{
@@ -54,11 +66,10 @@ h1,h2,h3,h4,h5,h6,p
 	color:#000;
 }
 
-.l-btn:hover
+.l-btn,.s-btn:hover
 {
-color:#040!important;
-font-weight: bold;
-transition:0.1s;
+background-color: #020;
+color:#ddd!important;
 
 }
 

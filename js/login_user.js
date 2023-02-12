@@ -18,17 +18,22 @@ $(document).ready(function(){
 			success : function(response){
              $(".l-btn").html("Login now");
               $(".l-btn").removeAttr("disabled");
-			
+			alert(response);
                if(response.trim() =="Login success")
                {
                window.location = "profile/profile.php";
+               }
+               else if(response.trim()=="login pending"){
+                    $(".login-form").fadeOut(500,function(){
+                    $(".activator").removeClass("d-none");
+                    });
                }
                else if(response.trim() =="wrong password")
                {
                 var message = document.createElement("DIV");
                 message.className = "alert alert-warning";
                 message.innerHTML="<b>"+ response +"</b>";
-                $(".login-notice").append(message);
+                $(".login-notice").html(message);
                 setTimeout(function(){
                 $(".login-notice").html("");
                 },5000);
@@ -39,9 +44,8 @@ $(document).ready(function(){
                {
                 var message = document.createElement("DIV");
                 message.className = "alert alert-warning";
-                message.innerHTML="<b>"+ response +"</b>";
-                $(".login-notice").append(message);
-
+                message.innerHTML="<b>"+ response +" !</b>";
+                $(".login-notice").html(message);
                 setTimeout(function(){
                 $(".login-notice").html("");
                 },5000);
