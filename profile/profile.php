@@ -192,15 +192,51 @@ echo $data['full_name'];
 <?php 
 
 $current_date = date('Y-m-d');
-$get_expiry_date = "SELECT expiry_date FROM users WHERE username='$username'";
+$get_expiry_date = "SELECT expiry_date,plans,full_name FROM users WHERE username='$username'";
 $response = $db->query($get_expiry_date);
 $data = $response->fetch_assoc();
-$expiry_date = $data['expiry_date'];
-if($current_date == $expiry_date){
-	echo  "activation faild ";
-}else{
-	echo "activation success ";
+$plans = $data['plans'];
+if($plans !="free"){
+	$expiry_date = $data['expiry_date'];
+	$cal_date = new DateTime($expiry_date);
+	$cal_date->sub(new DateInterval('P5D'));
+	$five_days_before = $cal_date->format('Y-m-d');
+	if($current_date == $five_days_before){
+		echo  "<div class='alert alert-warning rounded-0 shadow-lg fixed-top py-3'><i class='fa fa-times-circle close' data-dismiss='alert'></i>You have only 5 days left to renew your plan</div";
+	}else if($current_date < $five_days_before){
+		$manual_expiry_date = date_create($expiry_date);
+		$manual_current_date = date_create($current_date);
+		$date_diff = date_diff($manual_current_date,$manual_expiry_date);
+		$left_days = $date_diff->format('%a');
+		echo  "<div class='alert alert-warning rounded-0 shadow-lg fixed-top py-3'><i class='fa fa-times-circle close' data-dismiss='alert'></i>You have only ".$left_days." days left to renew your plan</div";
+	}else if($current_date >= $expiry_date){
+		$amount;
+		$storage;
+		if($plans=="starter"){
+			$amount = 99;
+			$storage = 1024;
+		}else{
+			$amount = 99;
+			$storage ='unlimited';
+		}
+		$renew_link = "php/pay.php?amount=".$amount."&plans=".$plans."&storage=".$storage;
+        $_SESSION['renew'] = "yes";
+		$_SESSION['buyer_name'] = $data['full_name'];
+		
+		echo  "<div class='d-flex alert alert-warning rounded-0 shadow-lg fixed-top '>
+		<h4 class='flex-fill'>Plan expired choose an action !</h4>
+		<a href='".$renew_link."' class=' btn btn-primary mx-3'>Renew old product</a>
+		<a href='shopping.php' class='btn btn-danger mr-3'>Purchase new plan</a>
+		<a href='php/logout.php' class='btn btn-light mr-3'>Logout</a>
+		</div";
+
+		echo "<style>
+		.upload-icon{
+			pointer-events:none;
+
+		}
+		</style>";
+
+	}
 }
-
-
 ?>

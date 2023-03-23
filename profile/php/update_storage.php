@@ -13,8 +13,12 @@ if($plan=="starter" || $plan=="free"){
 $select_storage = "SELECT storage FROM users WHERE username='$username'";
 $response = $db->query($select_storage);
 $data = $response->fetch_assoc();
-$final_storage = $data['storage']+$storage;
-
+$final_storage;
+if(empty($_SESSION['renew'])){
+    $final_storage = $data['storage']+$storage;
+}else{
+    $final_storage = $data['storage']+0;
+}
      //generate expiry date
      $cal_date = new DateTime($purchase_date);
      $cal_date->add(new DateInterval('P30D'));
