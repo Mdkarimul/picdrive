@@ -24,8 +24,6 @@ if(empty($username))
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="style/profile.css">
 
-<script type="text/javascript" src="js/profile.js"></script>
-<script type="text/javascript" src="js/edit_photo.js"></script>
 <style type="text/css">
 	
 	span:focus{
@@ -124,7 +122,7 @@ $( '.load-image').on( 'click', '.pic', function () {
 	//load image
 	$(document).ready(function(){
 		var s_point = 0;
-		var e_point = 12;
+		var e_point = 8;
 		function load_image(s_point,e_point)
 		{
 			$.ajax({
@@ -138,23 +136,29 @@ $( '.load-image').on( 'click', '.pic', function () {
 				success : function(response){
 					var data = JSON.parse(response);
 					for(var i=0;i<data.length;i++){
+					
 						var content =`
 						<div class='col-md-3 px-2 pb-5'>
 						 <div class='card shadow-lg'>
 <div class='card-body d-flex justify-content-center align-items-center'>
 <img src='${data[i][0]}' data-location='${data[i][1]}' width='100' height='150px' class='rounded-circle pic'>
+
+
+
+
 </div>
 <div class='card-footer d-flex justify-content-around align-items-center'>
 <div class='d-flex align-items-center' style='text-wrap:wrap;height:20px;width:90px;position:relative;'>
-<span style='position:absolute;top:-4px;'>"${data[i][3]}"</span>
+<span style='position:absolute;top:-4px;'>${data[i][3]}</span>
 </div>
-<i title='save' class='fa fa-save save-icon d-none' style='cursor:pointer;' data-location='${data[i][1]}'></i>
-<i class='fa fa-spinner loader-icon d-none' style='cursor:pointer;' data-location='${data[i][1]}'></i>
-<i title='edit' class='fa fa-edit edit-icon' style='cursor:pointer;' data-location='${data[i][1]}'></i>
-<i title='download' class='fa fa-download download-icon' style='cursor:pointer;' data-location='${data[i][0]}' file-name='${data[i][0]}'></i>
-<i title='Delete' class='fa fa-trash delete-icon' style='cursor:pointer;' data-location='${data[i][1]}'></i>
+<i  title='save' class='fa fa-save save-icon d-none' style='cursor:pointer;' data-location='${data[i][1]}'></i>
+<i   class='fa fa-spinner loader-icon d-none' style='cursor:pointer;' data-location='${data[i][1]}'></i>
+<i  title='edit' class='fa fa-edit edit-icon' style='cursor:pointer;' data-location='${data[i][1]}'></i>
+<i  title='download' class='fa fa-download download-icon' style='cursor:pointer;' data-location='${data[i][0]}' file-name='${data[i][0]}'></i>
+<i  title='Delete' class='fa fa-trash delete-icon' style='cursor:pointer;' data-location='${data[i][1]}'></i>
 
 </div>
+
 </div>
 </div>`;
 $(".load-image").append(content);
@@ -224,7 +228,9 @@ $(".load-image").append(content);
 	// 	});
 	//    });
 
-	
+
 </script>
+<script type="text/javascript" src="js/profile.js"></script>
+<script type="text/javascript" src="js/edit_photo.js"></script>
 </body>
 </html>

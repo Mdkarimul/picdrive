@@ -17,8 +17,7 @@ $table = $_SESSION['table_name'];
 
 if(file_exists($n_path))
 {
-	echo "File already exit enter another name";
-	
+	echo "File already exit enter another name";	
 }
 else
 {

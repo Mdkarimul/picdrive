@@ -7,8 +7,9 @@ $(document).ready(function(){
 		});
 	});
 });
-$('.edit-icon').on( 'click', function () { 
-	alert();
+
+
+$( '.load-image').on( 'click', '.edit-icon', function () { 
 	var location = $('.edit-icon').attr('data-location');
 	var parent = this.parentElement;
 var span = 	parent.getElementsByTagName("SPAN")[0];
@@ -59,51 +60,45 @@ $(save).removeClass("d-none");
  });
 })
 
-//download 
-$(document).ready(function(){
-	$(".download-icon").each(function(){
-		$(this).click(function(){
-			var download_link = $(this).attr('data-location');
-			var name = $(this).attr("file-name");
-			var a  = document.createElement("A");
-			a.href=download_link;
-			a.download = name;
-			a.click();
-		});
+
+$( '.load-image').on( 'click', '.download-icon', function () { 
+	$(this).click(function(){
+		var download_link = $(this).attr('data-location');
+		var name = $(this).attr("file-name");
+		var a  = document.createElement("A");
+		a.href=download_link;
+		a.download = name;
+		a.click();
 	});
-});
+})
+
 
 
 //delete photo
-
-$(document).ready(function(){
-	$(".delete-icon").each(function(){
-		$(this).click(function(){
-		 var location = $(this).attr("data-location");
-		 var parent = this.parentElement;
-		 var del = 	parent.getElementsByClassName("delete-icon")[0];
-		 
-		 $.ajax({
-		 	type : "POST",
-		 	url : 'php/delete.php',
-		 	data : {
-		 		location : location
-		 	},
-		 	beforeSend : function(){
-		 		$(del).removeClass("fa fa-trash");
-		 		$(del).addClass("fa fa-spinner fa-spin");
-		 	},
-		 	success : function(response){
-		 		$(del).removeClass("fa fa-spinner fa-spin");
-		 		$(del).addClass("fa fa-trash");
-		 		alert(response);
-
-		 		if(response.trim() =="Delete success")
-		 		{
-		 			parent.parentElement.remove();
-		 		}
-		 	}
-		 });
+$( '.load-image').on( 'click', '.delete-icon', function () { 
+	$(this).click(function(){
+		var location = $(this).attr("data-location");
+		alert(location);
+		var parent = this.parentElement;
+		var del = 	parent.getElementsByClassName("delete-icon")[0];
+		$.ajax({
+			type : "POST",
+			url : 'php/delete.php',
+			data : {
+				location : location
+			},
+			beforeSend : function(){
+				$(del).removeClass("fa fa-trash");
+				$(del).addClass("fa fa-spinner fa-spin");
+			},
+			success : function(response){
+				$(del).removeClass("fa fa-spinner fa-spin");
+				$(del).addClass("fa fa-trash");
+				if(response.trim() =="Delete success")
+				{
+					parent.parentElement.remove();
+				}
+			}
 		});
-	});
-});
+	   });
+})

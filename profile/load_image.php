@@ -7,10 +7,12 @@ require_once("../php/database.php");
 
 session_start();
 $table = $_SESSION['table_name'];
-$get_path = "SELECT * FROM $table ORDER BY id ASC LIMIT $s , $e";
+$get_path = "SELECT * FROM $table ORDER BY id ASC LIMIT $s,$e";
 $response = $db->query($get_path);
+
 while($data = $response->fetch_assoc())
 {
+    
 $thump =  str_replace("../","",$data['thump_path']);
 $path =  str_replace("../","",$data['img_path']);
 $img_name = $data['img_name'];
